@@ -7,6 +7,25 @@ import random
 import time
 import os
 
+print("Välkommen till Mortis Ludi!\n")
+print("Välj svårighetsgrad:\n1. Enkel\n2. Medel\n3. Svår")
+svårighetsgrad = int(input("Skriv in ditt val (1, 2, 3): "))
+
+
+if svårighetsgrad == 1:
+    healthpoints = 15  
+    fiende = 4  
+elif svårighetsgrad == 2:
+    healthpoints = 10  
+    fiende = 6  
+elif svårighetsgrad == 3:
+    healthpoints = 8  
+    fiende = 8  
+else:
+    print("Ogiltigt val, standardinställning (Medel) används.")
+    healthpoints = 10
+    fiende = 6
+
 def clear_terminal():
     if os.name == 'nt':
         os.system('cls')
@@ -15,7 +34,7 @@ clear_terminal()
 #intro
 blod = int(input("Välj mängden blodbeskrivningar: skriv '1' för mindre blod och '2' för mer blod "))
 
-if blod == 1:
+if blod == 2:
     blod = True
 else:
     blod = False
@@ -27,8 +46,6 @@ input("")
 time.sleep(1)
 clear_terminal()
 
-healthpoints = 10
-fiende = 1
 lista = ["spark", "slag", "kast"]
 strid = True
 
@@ -61,33 +78,42 @@ while strid == True:
         if blod == True:
             print("Du slår en hård uppercut mot Guts innan han hinner sparka dig. Blod och tänder kastas ut ur hans mun")
         elif blod == False:
-            print("Du slår fienden innan den hinner sparka dig.")
+            print("Du slår Guts innan den hinner sparka dig.")
         fiende -= 3
-        print(f"Fienden har {fiende} hälsopoäng kvar.")
+        print(f"Guts har {fiende} hälsopoäng kvar.")
     
 
     elif val1 == "spark" and fiendeval == "kast":
         if blod == True:
-            print("Du sparkar Guts i anisktet och bbunononjnon")
+            print("Du sparkar Guts i anisktet och hans skalle spriker.")
         elif blod == False:
-            print("Du sparkar ner fienden på marken.")
+            print("Du sparkar ner Guts på marken.")
         fiende -= 5
-        print(f"Fienden har {fiende} hälsopoäng kvar.")
+        print(f"Guts har {fiende} hälsopoäng kvar.")
     
     elif val1 == "spark" and fiendeval == "slag":
-        print("Fienden slår dig innan du hinner sparka.")
+        if blod == True:
+            print("Guts slår dig i ansiktet och slår ut dina tänder innan du hinner sparka.")
+        elif blod == False:
+            print("Guts slår dig innan du hinner sparka.")
         healthpoints -= 3
         print(f"Du har {healthpoints} hälsopoäng kvar.")
     
     elif val1 == "kast" and fiendeval == "spark":
-        print("Fienden sparkar dig innan du hinner kasta honom.")
+        if blod == True:
+            print("Guts sparkar dig hårt i magen innan du hinner kasta honom... blod flyger ut från din mun.")
+        elif blod == False:
+            print("Guts sparkar dig innan du hinner kasta honom.")
         healthpoints -= 5
         print(f"Du har {healthpoints} hälsopoäng kvar.")
     
     elif val1 == "kast" and fiendeval == "slag":
-        print("Du kastar ner fienden i marken innan han slår dig.")
+        if blod == True:
+            print("Du kastar ner Guts i marken och blod flyger ut ur munnen på han.")
+        elif blod == False:
+            print("Du kastar ner Guts i marken innan han slår dig.")
         fiende -= 3
-        print(f"Fienden har {fiende} hälsopoäng kvar.")
+        print(f"Guts har {fiende} hälsopoäng kvar.")
     
     if fiende <= 0 or healthpoints <= 0:
         strid = False
