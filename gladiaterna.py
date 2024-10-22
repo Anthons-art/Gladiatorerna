@@ -32,7 +32,7 @@ def clear_terminal():
 clear_terminal()
 time.sleep(1)
 
-# Intro
+
 blod = int(input("Välj mängden blodbeskrivningar: skriv '1' för mindre blod och '2' för mer blod "))
 
 if blod == 2:
@@ -47,21 +47,21 @@ vapenval = int(input("Skriv in ditt val (1, 2, 3): "))
 
 if vapenval == 1:
     vapen = "svärd"
-    skicklighet = 0.75  
-    skada = 20 
+    skicklighet = 0.40  
+    skada = 16 
 elif vapenval == 2:
     vapen = "yxa"
-    skicklighet = 0.65  
-    skada = 22  
+    skicklighet = 0.30
+    skada = 20  
 elif vapenval == 3:
     vapen = "spjut"
-    skicklighet = 0.7  
-    skada = 21  
+    skicklighet = 0.35  
+    skada = 18  
 else:
     print("Ogiltigt val, du får svärd som standardvapen.")
     vapen = "svärd"
-    skicklighet = 0.75
-    skada = 20
+    skicklighet = 0.40
+    skada = 16
 
 clear_terminal()
 time.sleep(1)
@@ -105,7 +105,7 @@ while strid:
             print(f"Du missar med vapnet: {vapen}.")
             if fiendeval == "slag" or fiendeval == "kast" or fiendeval == "spark":
                 print(f"Guts använder {fiendeval} och slår bort ditt vapen och skadar dig samtidigt.")
-                healthpoints -= 10
+                healthpoints -= 20
     else:
         print(f"Guts väljer {fiendeval}")
 
