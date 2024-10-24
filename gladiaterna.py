@@ -32,15 +32,14 @@ def clear_terminal():
 clear_terminal()
 time.sleep(1)
 
+blod = (input("Välj mängden blodbeskrivningar: skriv '1' för mindre blod och '2' för mer blod "))
 
-blod = int(input("Välj mängden blodbeskrivningar: skriv '1' för mindre blod och '2' för mer blod "))
-
-if blod == 2:
+if blod == "2":
     blod = True
-    print("Beskrivningarna blir mindre blodiga ")
+    print("Beskrivningarna blir blodigare.")
 else:
     blod = False
-    print("Beskrivningarna blir mer blodiga")
+    print("Beskrivningarna blir mindre blodiga.")
 
 print("\nVälj ditt vapen:\n1. Svärd\n2. Yxa\n3. Spjut")
 vapenval = int(input("Skriv in ditt val (1, 2, 3): "))
@@ -80,87 +79,87 @@ clear_terminal()
 
 lista = ["spark", "slag", "kast"]
 strid = True
+start_tid = time.time() 
+tidsgrans = 50 
+modighet_spelare = 0  
+modighet_fiende = 0 
 
 print("Guts börjar springa emot dig med en arg blick\n")
 
-
 while strid:
     fiendeval = random.choice(lista)
+
+    nu_tid = time.time()
+    elapsed_time = nu_tid - start_tid
+    if elapsed_time >= tidsgrans:
+        print("Tiden har gått ut! Striden avbryts.")
+        break
 
     print(f"Du har {healthpoints} hälsopoäng kvar.")
     print(f"Guts har {fiende} hälsopoäng kvar.")
 
     val1 = input("Vilket väljer du, slag, spark, kast eller vapen? ").lower()
 
-  
+    if val1 == "kast":
+        modighet_fiende += 2
+    else:
+        modighet_spelare += 1 
+    
+      
+
     if val1 == "vapen":
         print(f"Guts väljer {fiendeval}")
         if random.random() <= skicklighet: 
             print(f"Du använder vapnet: {vapen} och träffar Guts!")
             fiende -= skada
+            modighet_fiende += 1  
             if blod:
                 print(f"Blod flyger när du träffar Guts med vapnet: {vapen}!")
-            
         else:
             print(f"Du missar med vapnet: {vapen}.")
-            if fiendeval == "slag" or fiendeval == "kast" or fiendeval == "spark":
+            if fiendeval in ["slag", "kast", "spark"]:
                 print(f"Guts använder {fiendeval} och slår bort ditt vapen och skadar dig samtidigt.")
                 healthpoints -= 20
     else:
         print(f"Guts väljer {fiendeval}")
+        if fiendeval == "kast":
+            modighet_fiende += 2
+        else:
+            modighet_fiende += 1 
 
         if val1 == fiendeval:
             print("Ni båda missar och stirrar argt på varandra.")
-
         elif val1 == "slag" and fiendeval == "kast":
-            if blod:
-                print("Guts kastar dig ner i sanden och spräcker flera blodkärl i din kropp. Det flyter ut blod ur din mun.")
-            else:
-                print("Guts kastar dig i golvet.")
             healthpoints -= 13
-
+            print(f"Guts kastar dig i golvet." if not blod else "Guts kastar dig ner i sanden och spräcker flera blodkärl.")
         elif val1 == "slag" and fiendeval == "spark":
-            if blod:
-                print("Du slår en hård uppercut mot Guts innan han hinner sparka dig. Blod och tänder kastas ut ur hans mun.")
-            else:
-                print("Du slår Guts innan han hinner sparka dig.")
             fiende -= 13
-
+            print(f"Du slår Guts." if not blod else "Du slår en hård uppercut mot Guts och blod och tänder flyger.")
         elif val1 == "spark" and fiendeval == "kast":
-            if blod:
-                print("Du sparkar Guts i ansiktet och hans skalle spricker.")
-            else:
-                print("Du sparkar ner Guts på marken.")
             fiende -= 15
-
+            print(f"Du sparkar ner Guts." if not blod else "Du sparkar Guts i ansiktet och hans skalle spricker.")
         elif val1 == "spark" and fiendeval == "slag":
-            if blod:
-                print("Guts slår dig i ansiktet och slår ut dina tänder innan du hinner sparka.")
-            else:
-                print("Guts slår dig innan du hinner sparka.")
             healthpoints -= 13
-
+            print(f"Guts slår dig." if not blod else "Guts slår dig i ansiktet och tänder flyger.")
         elif val1 == "kast" and fiendeval == "spark":
-            if blod:
-                print("Guts sparkar dig hårt i magen innan du hinner kasta honom... blod flyger ut från din mun.")
-            else:
-                print("Guts sparkar dig innan du hinner kasta honom.")
             healthpoints -= 15
-
+            print(f"Guts sparkar dig." if not blod else "Guts sparkar dig hårt i magen, blod flyger.")
         elif val1 == "kast" and fiendeval == "slag":
-            if blod:
-                print("Du kastar ner Guts i marken och blod flyger ut ur hans mun.")
-            else:
-                print("Du kastar ner Guts i marken innan han slår dig.")
-            fiende -= 13
+            fiende -= 6
+            print(f"Du kastar ner Guts." if not blod else "Du kastar ner Guts i marken och blod sprutar.")
 
     if fiende <= 0 or healthpoints <= 0:
         strid = False
 
-
-if fiende <= 0:
+if elapsed_time >= tidsgrans:
+    if modighet_spelare > modighet_fiende:
+        print("Tiden är slut och du anses vara modigast. Du vinner!")
+    elif modighet_fiende > modighet_spelare:
+        print("Tiden är slut och Guts anses vara modigast. Han vinner!")
+    else:
+        print("Striden är oavgjord, ingen var modigast.")
+elif fiende <= 0:
     print("Du vann striden, Yippie!")
 else:
     print("Fienden vann striden.")
-
 
