@@ -4,22 +4,21 @@ import os
 
 print("Välkommen till Mortis Ludi!\n")
 print("Välj svårighetsgrad:\n1. Enkel\n2. Medel\n3. Svår")
-svårighetsgrad = int(input("Skriv in ditt val (1, 2, 3): "))
+difficulty = int(input("Skriv in ditt val (1, 2, 3): "))
 
-
-if svårighetsgrad == 1:
+if difficulty == 1:
     healthpoints = 100
-    fiende = 50
-elif svårighetsgrad == 2:
+    enemy = 50
+elif difficulty == 2:
     healthpoints = 80
-    fiende = 60
-elif svårighetsgrad == 3:
+    enemy = 60
+elif difficulty == 3:
     healthpoints = 60
-    fiende = 70
+    enemy = 70
 else:
     print("Ogiltigt val, standardinställning (Medel) används.")
     healthpoints = 80
-    fiende = 60
+    enemy  = 60
 
 def clear_terminal():
     if os.name == 'nt':
@@ -38,25 +37,48 @@ else:
     blod = False
     print("Beskrivningarna blir mindre blodiga.")
 
-print("\nVälj ditt vapen:\n1. Svärd\n2. Yxa\n3. Spjut")
+print("\nVälj ditt vapen:\n1. Ragnarök(Ett kraftfullt svärd, känt för att bringa förstörelse.)\n2. Grimnirs Röst (En yxa med tung klinga, används bäst vid avgörande hugg.)\n3. Odens Gåva (Inspirerat av Gungner, Odens spjut, träffar alltid sitt mål.)")
 vapenval = int(input("Skriv in ditt val (1, 2, 3): "))
 if vapenval == 1:
-    vapen = "svärd"
+    vapen = "Ragnarök"
     skicklighet = 0.40
     skada = 16
 elif vapenval == 2:
-    vapen = "yxa"
+    vapen = "Grimnirs Röst"
     skicklighet = 0.30
     skada = 20
 elif vapenval == 3:
-    vapen = "spjut"
+    vapen = "Odens Gåva"
     skicklighet = 0.35
     skada = 18
 else:
-    print("Ogiltigt val, du får svärd som standardvapen.")
-    vapen = "svärd"
+    print("Ogiltigt val, du får Ragnarök som standardvapen.")
+    vapen = "Ragnarök"
     skicklighet = 0.40
     skada = 16
+
+clear_terminal()
+time.sleep(1)
+
+print("\nVälj din sköld:\n1. Aegis (bra mot slag och spark)\n2. Titanus (bra mot kast och slag)\n3. Celatus (bra mot spark och kast)")
+sköldval = int(input("Skriv in ditt val (1, 2, 3): "))
+if sköldval == 1:
+    sköld = "Aegis"
+    skyddade_attacker = ["slag", "spark"]
+elif sköldval == 2:
+    sköld = "Titanus"
+    skyddade_attacker = ["kast", "slag"]
+elif sköldval == 3:
+    sköld = "Celatus"
+    skyddade_attacker = ["spark", "kast"]
+else:
+    print("Ogiltigt val, du får en Aegis som standard.")
+    sköld = "Aegis"
+    skyddade_attacker = ["slag", "spark"]
+
+print(f"Du har valt {sköld} som ditt skydd.")
+
+
 
 print(f"\nVill du specialisera dig på ditt valda vapen {vapen}?")
 specialisering = input("Skriv 'ja' för att specialisera dig, annars skriv 'nej': ").lower() == 'ja'
@@ -102,9 +124,9 @@ while strid:
         break
 
     print(f"Du har {healthpoints} hälsopoäng kvar.")
-    print(f"Guts har {fiende} hälsopoäng kvar.")
+    print(f"Guts har {enemy} hälsopoäng kvar.")
 
-    val1 = input("Vilket väljer du, slag, spark, kast eller vapen? ").lower()
+    val1 = input("Vilket väljer du, slag, spark, kast, sköld eller vapen? ").lower()
 
     if val1 == "kast":
         modighet_fiende += 2
@@ -112,10 +134,20 @@ while strid:
         modighet_spelare += 1
 
     print(f"Guts väljer {fiendeval}")
+    
+    if val1 == "sköld":
+        if fiendeval in skyddade_attacker:
+            print(f"Du parerar Guts attack med din {sköld}!")
+            enemy -= 5
+            continue
+        else:
+            print("Din sköld var inte tillräckligt effektiv mot attacken!")
+            healthpoints -= 10
+
     if val1 == "vapen":
         if random.random() <= skicklighet:
             print(f"Du använder vapnet: {vapen} och träffar Guts!")
-            fiende -= skada
+            enemy -= skada
             modighet_fiende += 1
             if blod:
                 print(f"Blod flyger när du träffar Guts med vapnet: {vapen}!")
@@ -132,10 +164,10 @@ while strid:
             healthpoints -= 13
         elif val1 == "slag" and fiendeval == "spark":
             print(f"Du slår Guts." if not blod else "Du slår en hård uppercut mot Guts och blod och tänder flyger.")
-            fiende -= 13
+            enemy -= 13
         elif val1 == "spark" and fiendeval == "kast":
             print(f"Du sparkar ner Guts." if not blod else "Du sparkar Guts i ansiktet och hans skalle spricker.")
-            fiende -= 15
+            enemy -= 15
         elif val1 == "spark" and fiendeval == "slag":
             print(f"Guts slår dig." if not blod else "Guts slår dig i ansiktet och tänder flyger.")
             healthpoints -= 13
@@ -144,9 +176,9 @@ while strid:
             healthpoints -= 15
         elif val1 == "kast" and fiendeval == "slag":
             print(f"Du kastar ner Guts." if not blod else "Du kastar ner Guts i marken och blod sprutar.")
-            fiende -= 13
+            enemy -= 13
 
-    if fiende <= 0 or healthpoints <= 0:
+    if enemy <= 0 or healthpoints <= 0:
         strid = False
 
 kejsarens_beslut = random.choice([True, False])
@@ -164,8 +196,7 @@ else:
             print("Tiden är slut och Guts anses vara modigast. Han vinner!")
         else:
             print("Striden är oavgjord, ingen var modigast.")
-    elif fiende <= 0:
+    elif enemy <= 0:
         print("Du vann striden, Yippie!")
     else:
         print("Fienden vann striden.")
-
